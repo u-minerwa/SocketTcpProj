@@ -3,6 +3,7 @@ package org.example;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.ZonedDateTime;
@@ -23,9 +24,39 @@ public class Server {
     static int city_id = 0;
     static String appId = "2a9391878d3c4a87279b49bdc5f73a9d";
 
-    public static void whileTrue() throws Exception {
-        while (true){
-            // Получение данных о погоде:
+
+    public static void proverka() throws Exception {
+        System.out.println("saasas");
+    }
+
+    public static void startServer() throws Exception {
+        try {
+            serverSocket = new ServerSocket(9999);
+            System.out.println("Сервер запущен и ожидает подключения...");
+
+            while (true) {
+                clientSocket = serverSocket.accept();
+                System.out.println("Клиент подключен: " + clientSocket);
+
+                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+
+                int messageCount = 1;
+                while (true) {
+                    String message = getJson();
+                    out.println(message);
+                    System.out.print(message);
+                    Thread.sleep(5000);
+                }
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+        // System.out.println("dsdsd");
+
+    public static String getJson() {
+        // Получение данных о погоде:
+        try {
             JSONObject data = WeatherDataFetcherFromBefore.fetchWeatherData(s_city, appId);
             city_id = data.getJSONArray("list").getJSONObject(0).getInt("id");
 
@@ -50,17 +81,12 @@ public class Server {
             weatherJsonFirst.put("temp_max", data.getJSONArray("list").getJSONObject(0).getJSONObject("main").getDouble("temp_max"));
 
             // Преобразование в строку JSON с отступами:
-            String jsonString = weatherJsonFirst.toString();
-
-            // Вывод строки JSON:
-            System.out.println(jsonString);
-            System.out.println("Successful!");
-            TimeUnit.SECONDS.sleep(5);
+            return weatherJsonFirst.toString();
+        } catch (Exception e) {
+            System.out.println("Error while fetching data from API");
+            return "";
         }
-    }
 
-    public static void proverka() throws Exception {
-        System.out.println("saasas");
     }
 
     public static void startServer() throws Exception {
@@ -75,18 +101,21 @@ public class Server {
         Server.whileTrue();
     }
 
-    public void closeSockets() {
+    public static boolean closeSockets() {
         try {
             if (clientSocket != null && !clientSocket.isClosed()) {
                 clientSocket.close();
+                return true;
             }
 
             if (serverSocket != null && !serverSocket.isClosed()) {
                 serverSocket.close();
+                throw new RuntimeException("Server Socket is closed");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
     }
 }
 
