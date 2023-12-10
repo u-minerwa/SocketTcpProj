@@ -89,6 +89,17 @@ public class Server {
 
     }
 
+    public static void startServer() throws Exception {
+        serverSocket = new ServerSocket(9999);
+        System.out.println("Ждём подключения клиента...");
+
+        clientSocket = serverSocket.accept();
+        System.out.println("Подключен клиент с адресом: " + clientSocket.getInetAddress());
+
+        // Здесь ты можешь использовать clientSocket для взаимодействия с клиентом:
+
+        Server.whileTrue();
+    }
 
     public static boolean closeSockets() {
         try {
@@ -107,5 +118,4 @@ public class Server {
         return false;
     }
 }
-
 
