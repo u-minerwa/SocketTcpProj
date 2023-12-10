@@ -73,7 +73,6 @@ public class Server {
         // Здесь ты можешь использовать clientSocket для взаимодействия с клиентом:
 
         Server.whileTrue();
-        // System.out.println("dsdsd");
     }
 
     public void closeSockets() {
@@ -90,5 +89,4 @@ public class Server {
         }
     }
 }
-
 
