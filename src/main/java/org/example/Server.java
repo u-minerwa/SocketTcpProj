@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+
 public class Server {
     private static ServerSocket serverSocket;
     private static Socket clientSocket;
@@ -29,7 +30,7 @@ public class Server {
         System.out.println("saasas");
     }
 
-    public static void startServer() throws Exception {
+    public static void startServerR() throws Exception {
         try {
             serverSocket = new ServerSocket(9999);
             System.out.println("Сервер запущен и ожидает подключения...");
@@ -52,7 +53,6 @@ public class Server {
             e.printStackTrace();
         }
     }
-        // System.out.println("dsdsd");
 
     public static String getJson() {
         // Получение данных о погоде:
@@ -86,7 +86,6 @@ public class Server {
             System.out.println("Error while fetching data from API");
             return "";
         }
-
     }
 
     public static void startServer() throws Exception {
@@ -98,7 +97,7 @@ public class Server {
 
         // Здесь ты можешь использовать clientSocket для взаимодействия с клиентом:
 
-        Server.whileTrue();
+        Server.startServerR();
     }
 
     public static boolean closeSockets() {
@@ -118,4 +117,3 @@ public class Server {
         return false;
     }
 }
-
